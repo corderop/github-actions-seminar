@@ -2,6 +2,9 @@ name: "Close"
 description: "Close PR"
 
 inputs:
+  github-token:
+    description: "Github token"
+    required: true
   ban-file:
     description: "File where banned users are listed"
     required: true
