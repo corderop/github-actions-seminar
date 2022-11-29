@@ -1,0 +1,16 @@
+name: "Close"
+description: "Close PR"
+
+inputs:
+  ban-file:
+    description: "File where banned users are listed"
+    required: true
+    default: ".github/ban_list"
+
+outputs:
+  closed:
+    description: "If the PR was closed"
+
+runs:
+  using: "node16"
+  main: "dist/index.js"
