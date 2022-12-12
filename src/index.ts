@@ -1,5 +1,5 @@
 import * as core from "@actions/core"
-import { getActionInput, getPRInfo, translateText } from "./utils"
+import { getActionInput, getPRInfo, sendComment, translateText } from "./utils"
 
 async function run() {
   const { GITHUB_TOKEN, RAPID_API_KEY } = getActionInput()
@@ -11,6 +11,7 @@ async function run() {
   }
 
   const translatedText = await translateText(prComment, RAPID_API_KEY)
+  sendComment(translatedText, prId, GITHUB_TOKEN)
 }
 
 run()

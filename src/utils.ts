@@ -29,8 +29,14 @@ function getPRInfo() {
 
   const context = github.context
   const { pull_request: pullRequest } = context.payload
-  const comment = pullRequest?.body
-  const id = pullRequest?.number
+
+  if (!pullRequest) {
+    core.setFailed("Could not find pull request")
+    throw Error("Action failed")
+  }
+
+  const comment = pullRequest.body
+  const id = pullRequest.number
 
   if (!comment) {
     core.warning("No comment found in the PR")
@@ -75,4 +81,24 @@ async function translateText(text: string, RAPID_API_KEY: string) {
   return translatedText
 }
 
-export { getActionInput, getPRInfo, translateText }
+async function sendComment(
+  translatedText: string,
+  prId: number,
+  GITHUB_TOKEN: string
+) {
+  core.startGroup("Sending comment to PR")
+
+  const context = github.context
+  const octokit = github.getOctokit(GITHUB_TOKEN)
+  const message = `:robot: **Translated comment**: ${translatedText}`
+
+  await octokit.rest.issues.createComment({
+    ...context.repo,
+    issue_number: prId,
+    body: message,
+  })
+
+  core.endGroup()
+}
+
+export { getActionInput, getPRInfo, translateText, sendComment }
