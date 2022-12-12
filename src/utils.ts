@@ -1,4 +1,5 @@
 import * as core from "@actions/core"
+import * as github from "@actions/github"
 
 function getActionInput() {
   let GITHUB_TOKEN: string
@@ -21,4 +22,21 @@ function getActionInput() {
   return { GITHUB_TOKEN, RAPID_API_KEY }
 }
 
-export { getActionInput }
+function getPRInfo() {
+  core.startGroup("Getting PR comment")
+
+  const context = github.context
+  const { pull_request: pullRequest } = context.payload
+  const comment = pullRequest?.body
+  const id = pullRequest?.number
+
+  if (!comment) {
+    core.warning("No comment found in the PR")
+  }
+
+  core.endGroup()
+
+  return { comment, id }
+}
+
+export { getActionInput, getPRInfo }
