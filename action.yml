@@ -1,0 +1,14 @@
+name: "Translate"
+description: "Translate the message content"
+
+inputs:
+  GITHUB_TOKEN:
+    description: "GitHub Octokit Token"
+    required: true
+  RAPID_API_KEY:
+    description: "Rapid API Key for Google Translate integration"
+    required: true
+
+runs:
+  using: "node16"
+  main: "dist/index.js"
